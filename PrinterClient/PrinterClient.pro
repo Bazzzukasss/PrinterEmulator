@@ -32,7 +32,9 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     ControlFrame.h \
-    TCPClient.h
+    TCPClient.h \
+    Commands.h \
+    ../PrinterServer/Commands.h
 
 FORMS += \
         mainwindow.ui \

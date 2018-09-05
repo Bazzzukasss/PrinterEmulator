@@ -3,8 +3,6 @@
 #include <memory>
 #include <time.h>
 
-using namespace NS_Communication;
-
 TCPClient::TCPClient(QObject *parent)
     : QObject(parent)
     , mPort(0x0)
@@ -68,7 +66,6 @@ void TCPClient::initialize()
     connect(mpSocket, &QTcpSocket::connected,   this, &TCPClient::connected);
     connect(mpSocket, &QTcpSocket::disconnected,this, &TCPClient::disconnected);
     connect(mpSocket, &QTcpSocket::bytesWritten,this, &TCPClient::bytesWritten);
-    connect(mpSocket, &QTcpSocket::disconnected,this, [&](){ emit signalCoreDisconnected(); }); // need refactoring
 }
 
 bool TCPClient::connectToHost(QHostAddress aIp, int aPort, int aTimeout)
@@ -79,11 +76,14 @@ bool TCPClient::connectToHost(QHostAddress aIp, int aPort, int aTimeout)
     mTimeout = aTimeout;
     emit signalInformation(QString("[Connecting]\t%1\t%2").arg(mIp.toString()).arg(mPort));
 
+    if(isConnected)
+        mpSocket->disconnectFromHost();
+
     mpSocket->connectToHost(mIp,mPort);
-    this->isConnected = true;
+    isConnected = true;
     if(!mpSocket->waitForConnected(mTimeout)){
         emit signalInformation(QString("[Error]\t%1").arg(mpSocket->errorString()));
-        this->isConnected = false;
+        isConnected = false;
         return false;
     }
 
@@ -119,11 +119,11 @@ qint64 TCPClient::sendData(const QByteArray& aData)
     }
     bool retval = true;
     emit signalInformation(QString("[Send Data]\t%1").arg(aData.data()));
-    qint64 bytesWritten = mpSocket->write(aData.data());
+    qint64 bytesWritten = mpSocket->write(aData);
     mpSocket->flush();
     if( bytesWritten != aData.length() )
     {
-        emit signalInformation(QString("[Error]\tFailed to write whole buffer."));
+        emit signalInformation(QString("[Error]\tFailed to write whole buffer.%1 != %2").arg(bytesWritten).arg(aData.length()));
         retval = false;
     }
     return retval;

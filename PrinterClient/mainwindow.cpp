@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QTimer>
+#include "../PrinterServer/Commands.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -10,21 +11,22 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->mControlFrameX->setCaption("X:");
     ui->mControlFrameX->setValue(0);
-    ui->mControlFrameX->setId(1);
+    ui->mControlFrameX->setId(AXIS_X);
 
     ui->mControlFrameY->setCaption("Y:");
     ui->mControlFrameY->setValue(0);
-    ui->mControlFrameY->setId(2);
+    ui->mControlFrameY->setId(AXIS_Y);
 
     ui->mControlFrameZ->setCaption("Z:");
     ui->mControlFrameZ->setValue(0);
-    ui->mControlFrameZ->setId(3);
+    ui->mControlFrameZ->setId(AXIS_Z);
 
-    connect(ui->mControlFrameX,&ControlFrame::signalActivated,this,&MainWindow::slotSendCommand);
-    connect(ui->mControlFrameY,&ControlFrame::signalActivated,this,&MainWindow::slotSendCommand);
-    connect(ui->mControlFrameZ,&ControlFrame::signalActivated,this,&MainWindow::slotSendCommand);
+    connect(ui->mControlFrameX,&ControlFrame::signalMove,this,&MainWindow::slotSendRunMovementCommand);
+    connect(ui->mControlFrameY,&ControlFrame::signalMove,this,&MainWindow::slotSendRunMovementCommand);
+    connect(ui->mControlFrameZ,&ControlFrame::signalMove,this,&MainWindow::slotSendRunMovementCommand);
+
     connect(ui->mButtonConnect,&QPushButton::clicked,this,&MainWindow::slotConnectToHost);
-    connect(&mClient,&NS_Communication::TCPClient::signalInformation,this,[&](const QString& aInformation){ui->mLog->append(aInformation); });
+    connect(&mClient,&TCPClient::signalInformation,this,[&](const QString& aInformation){ ui->mLog->append(aInformation); });
 
     slotConnectToHost();
 }
@@ -42,7 +44,34 @@ void MainWindow::slotConnectToHost()
     mClient.connectToHost(address,port);
 }
 
-void MainWindow::slotSendCommand(unsigned int aCommand)
+void MainWindow::slotSendRunResetCommand()
 {
-    mClient.sendData(QByteArray::number(aCommand));
+
+}
+
+void MainWindow::slotSendGetDataCommand()
+{
+
+}
+
+void MainWindow::fillData(QByteArray &aByteArray, Command &aCmd)
+{
+    aByteArray.append((char*)&aCmd, sizeof(Command));
+    qDebug()<<sizeof(Command);
+    qDebug()<<aByteArray.size();
+}
+
+void MainWindow::slotSendRunMovementCommand(int aAxisId, int aDistance, int aColor)
+{
+    Command cmd;
+    cmd.mType = CMD_MOVE;
+    cmd.data.cmdMove.mAxisId = aAxisId;
+    cmd.data.cmdMove.mDistance = aDistance;
+    cmd.data.cmdMove.mColor = aColor;
+
+    QByteArray data;
+    fillData(data,cmd);
+    qDebug()<<data;
+
+    mClient.sendData(data);
 }

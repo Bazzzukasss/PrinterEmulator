@@ -17,14 +17,14 @@ public:
 
     void setCaption(const QString& aCaption);
     void setValue(int aValue);
-    void setId(char aId);
+    void setId(int aId);
 
 signals:
-    void signalActivated(unsigned int aCommand);
+    void signalMove(int aId, int aDistance, int aColor);
 
 private:
     Ui::ControlFrame *ui;
-    unsigned int makeCMD(int aDirection);
+    void move(int aDirection);
     int mId{0};
 };
 

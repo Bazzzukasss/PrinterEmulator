@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "TCPClient.h"
+#include "../PrinterServer/Commands.h"
 
 namespace Ui {
 class MainWindow;
@@ -18,11 +19,15 @@ public:
 
 private slots:
     void slotConnectToHost();
-    void slotSendCommand(unsigned int aCommand);
+    void slotSendRunMovementCommand(int aAxisId, int aDistance, int aColor);
+    void slotSendRunResetCommand();
+    void slotSendGetDataCommand();
 
 private:
     Ui::MainWindow *ui;
-    NS_Communication::TCPClient mClient;
+    TCPClient mClient;
+
+    void fillData(QByteArray& aByteArray, Command &aCmd);
 };
 
 #endif // MAINWINDOW_H

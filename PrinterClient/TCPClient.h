@@ -5,53 +5,49 @@
 #include <QTcpSocket>
 #include <QMutex>
 #include <QHostAddress>
+const int default_timeout = 1000;
 
-namespace NS_Communication{
+class TCPClient : public QObject
+{
+    Q_OBJECT
+    public:
+        explicit TCPClient(QObject *parent = nullptr);
+        explicit TCPClient(QHostAddress aIp, int aPort,QObject *parent = nullptr);
+        virtual ~TCPClient();
 
-    const int default_timeout = 1000;
+        bool connectToHost(QHostAddress aIp, int aPort, int aTimeout);
+        bool connectToHost(QHostAddress aIp, int aPort);
+        bool connectToHost();
+        qint64 sendData(const QByteArray& aData);
+        void setTimeout(int aTimeout);
+        const char *getSid();
+        const QHostAddress getHostAddress() const;
 
-    class TCPClient : public QObject
-    {
-        Q_OBJECT
-        public:
-            explicit TCPClient(QObject *parent = nullptr);
-            explicit TCPClient(QHostAddress aIp, int aPort,QObject *parent = nullptr);
-            virtual ~TCPClient();
+    public slots:
+       void reciveHandler();
 
-            bool connectToHost(QHostAddress aIp, int aPort, int aTimeout);
-            bool connectToHost(QHostAddress aIp, int aPort);
-            bool connectToHost();
-            qint64 sendData(const QByteArray& aData);
-            void setTimeout(int aTimeout);
-            const char *getSid();
-			const QHostAddress getHostAddress() const;
+    signals:
+       void signalCoreConnected();
+       void signalCoreDisconnected();
+       void signalDataReceived(const QByteArray& aData);
+       void signalInformation(const QString& aInformation);
 
-        public slots:
-           void reciveHandler();
+    protected:
+       int mPort;
+       QHostAddress mIp;
+       int mTimeout{default_timeout};
+       QTcpSocket *mpSocket;
+       QMutex mMutex;
 
-        signals:
-           void signalCoreConnected();
-           void signalCoreDisconnected();
-           void signalDataReceived(const QByteArray& aData);
-           void signalInformation(const QString& aInformation);
+       virtual void handler(const QByteArray &aData);
+       virtual void connected();
+       virtual void disconnected();
+       virtual void bytesWritten(qint64 bytes);
 
-        protected:
-           int mPort;
-           QHostAddress mIp;
-           int mTimeout{default_timeout};
-           QTcpSocket *mpSocket;
-           QMutex mMutex;
+    private:
+       bool isConnected;
+       void initialize();
 
-           virtual void handler(const QByteArray &aData);
-           virtual void connected();
-           virtual void disconnected();
-           virtual void bytesWritten(qint64 bytes);
+};
 
-        private:
-           bool isConnected;
-           void initialize();
-
-    };
-
-}
 #endif // TCPCLIENT_H

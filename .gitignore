@@ -35,3 +35,9 @@
 /build-PrinterServer-Desktop_Qt_5_10_0_MSVC2015_64bit-Debug/Makefile.Release
 /build-PrinterServer-Desktop_Qt_5_10_0_MSVC2015_64bit-Debug/ui_mainwindow.h
 /PrinterServer/PrinterServer.pro.user
+/build-PrinterServer-Desktop_Qt_5_10_0_MSVC2015_64bit-Debug/debug/moc_TCPConnection.cpp
+/build-PrinterServer-Desktop_Qt_5_10_0_MSVC2015_64bit-Debug/debug/moc_TCPConnection.obj
+/build-PrinterServer-Desktop_Qt_5_10_0_MSVC2015_64bit-Debug/debug/moc_TCPServer.cpp
+/build-PrinterServer-Desktop_Qt_5_10_0_MSVC2015_64bit-Debug/debug/moc_TCPServer.obj
+/build-PrinterServer-Desktop_Qt_5_10_0_MSVC2015_64bit-Debug/debug/TCPConnection.obj
+/build-PrinterServer-Desktop_Qt_5_10_0_MSVC2015_64bit-Debug/debug/TCPServer.obj
