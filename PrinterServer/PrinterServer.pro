@@ -35,9 +35,9 @@ HEADERS += \
         mainwindow.h \
     TCPServer.h \
     TCPConnection.h \
-    Commands.h \
     Printer.h \
-    PrinterView.h
+    PrinterView.h \
+    Protocol.h
 
 FORMS += \
         mainwindow.ui

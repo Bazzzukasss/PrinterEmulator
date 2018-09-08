@@ -33,7 +33,6 @@ HEADERS += \
         mainwindow.h \
     ControlFrame.h \
     TCPClient.h \
-    Commands.h \
     ../PrinterServer/Commands.h
 
 FORMS += \

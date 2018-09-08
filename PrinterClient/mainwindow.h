@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "TCPClient.h"
-#include "../PrinterServer/Commands.h"
+#include "../PrinterServer/Protocol.h"
 
 class ControlFrame;
 

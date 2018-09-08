@@ -1,7 +1,7 @@
 #include "TCPConnection.h"
 #include <QTcpSocket>
 #include <QHostAddress>
-#include "Commands.h"
+#include "Protocol.h"
 
 TCPConnection::TCPConnection(QTcpSocket *aSocket, QObject *parent)
     : QObject(parent)

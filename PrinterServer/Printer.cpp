@@ -1,5 +1,5 @@
 #include "Printer.h"
-#include "Commands.h"
+#include "Protocol.h"
 #include <QTimer>
 
 Printer::Printer(QObject *parent)

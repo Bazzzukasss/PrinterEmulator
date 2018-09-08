@@ -2,7 +2,7 @@
 #include "Printer.h"
 #include <QDebug>
 #include <QGraphicsLineItem>
-#include "Commands.h"
+#include "Protocol.h"
 
 PrinterView::PrinterView(QWidget *parent)
     :QGraphicsView(parent)

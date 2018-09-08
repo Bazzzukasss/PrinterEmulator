@@ -5,7 +5,7 @@
 #include <QTcpSocket>
 #include <QMutex>
 #include <QHostAddress>
-#include "../PrinterServer/Commands.h"
+#include "../PrinterServer/Protocol.h"
 #include <QColor>
 
 const int default_timeout = 1000;

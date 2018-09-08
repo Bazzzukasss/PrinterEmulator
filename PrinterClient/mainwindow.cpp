@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QTimer>
-#include "../PrinterServer/Commands.h"
+#include "../PrinterServer/Protocol.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
