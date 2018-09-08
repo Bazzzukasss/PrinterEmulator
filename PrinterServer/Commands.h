@@ -1,13 +1,8 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-#define CMD_SET     1
-#define CMD_GET     2
-#define CMD_MOVE    3
-
-#define AXIS_X      1
-#define AXIS_Y      2
-#define AXIS_Z      3
+enum CommandsType{ CMD_SET, CMD_GET, CMD_MOVE};
+enum AxisesID{ AXIS_X, AXIS_Y, AXIS_Z, AXIS_COUNT};
 
 struct Command{
     int mType;
@@ -24,7 +19,8 @@ struct Command{
 
         struct{
             int mAxisId;
-            int mDistance;
+            int mStepsCount;
+            int mDirection;
             int mColor;
         }cmdMove;
 

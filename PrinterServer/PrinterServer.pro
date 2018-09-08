@@ -27,13 +27,15 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     TCPServer.cpp \
-    TCPConnection.cpp
+    TCPConnection.cpp \
+    Printer.cpp
 
 HEADERS += \
         mainwindow.h \
     TCPServer.h \
     TCPConnection.h \
-    Commands.h
+    Commands.h \
+    Printer.h
 
 FORMS += \
         mainwindow.ui
