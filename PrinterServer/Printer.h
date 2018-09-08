@@ -3,16 +3,33 @@
 
 #include <QObject>
 #include <QColor>
+#include <QVector>
 
-#define pPRINTER Printer::getInstance();
+class QTimer;
+
+#define pPRINTER Printer::getInstance()
 
 struct PrinterHeadAxis{
+    PrinterHeadAxis(int aId = 0, const QString& aName = "Axis") : mId(aId), mName(aName){}
+    int mId{0};
+    QString mName{"Axis"};
     int mValue{0};
     int mStepsCount{0};
     int mDirection{0};
-    void makeStep(){
-        if(--mStepsCount>0)
+
+    bool makeStep(){
+        if(mStepsCount>0)
+        {
             mValue+=mDirection;
+            mStepsCount--;
+            return true;
+        }
+        else
+            return false;
+    }
+
+    QString getInformation() const{
+        return QString("[%0] %1:\t Value: %2\t StepsCount: %3\t Direction: %4").arg(mId).arg(mName).arg(mValue).arg(mStepsCount).arg(mDirection);
     }
 };
 
@@ -20,9 +37,19 @@ struct PrinterHead
 {
     QVector<PrinterHeadAxis> mAxises;
     QColor mColor{Qt::black};
-    void makeStep(){
+
+    bool makeStep(){
+        bool isSteps = false;
         for(auto& axis : mAxises)
-            axis.makeStep();
+            isSteps|=axis.makeStep();
+        return isSteps;
+    }
+
+    QStringList getInformation() const{
+        QStringList list;
+        for(auto& axis : mAxises)
+            list << axis.getInformation();
+        return list;
     }
 };
 
@@ -39,22 +66,20 @@ public:
         return &printer;
     }
 
-    bool moveHead(int aAxisId, int aStepsCount, int aDirection, int aColor);
+    bool moveHead(int aAxisId, int aStepsCount, int aDirection, QColor aColor);
     int getCurrentPosition(int aAxisId);
 
 signals:
-    void signalStateChanged(const PrinterHead& aPrintHead);
+    void signalStateChanged(const PrinterHead& aHead);
 
 private:
     PrinterHead mHead;
     volatile bool mIsBusy{false};
+    QTimer* mTimer;
 
-    void startMotion();
-    void stopMotion();
     void moving();
-    void initialize();
 
-    explicit Printer(QObject *parent = nullptr){}
+    explicit Printer(QObject *parent = nullptr);
     Printer(const Printer&);
     Printer& operator=(const Printer&);
 };

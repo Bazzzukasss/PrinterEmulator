@@ -1,50 +1,46 @@
 #include "Printer.h"
 #include "Commands.h"
+#include <QTimer>
 
 Printer::Printer(QObject *parent)
     : QObject(parent)
 {
-    initialize();
+    int i(0);
+    QString names[AXIS_COUNT]={"X","Y","Z"};
+    while( ++i <= AXIS_COUNT )
+        mHead.mAxises.push_back(PrinterHeadAxis( i-1 , names[i-1]));
+
+    mTimer = new QTimer(this);
+    connect(mTimer, &QTimer::timeout, this, [&](){ moving(); });
+    mTimer->start(100);
 }
 
-bool Printer::moveHead(int aAxisId, int aStepsCount, int aDirection, int aColor)
+bool Printer::moveHead(int aAxisId, int aStepsCount, int aDirection, QColor aColor)
 {
     if(mIsBusy)
         return false;
 
-    PrinterHeadAxis* pAxis = mHead.mAxises[aAxisId];
+    mIsBusy = true;
+
+    PrinterHeadAxis* pAxis = &mHead.mAxises[aAxisId];
 
     pAxis->mStepsCount = aStepsCount;
     pAxis->mDirection = aDirection;
     mHead.mColor = aColor;
-
-    startMotion();
     return true;
 }
 
 int Printer::getCurrentPosition(int aAxisId)
 {
-
-}
-
-void Printer::startMotion()
-{
-    mIsBusy = true;
-}
-
-void Printer::stopMotion()
-{
-    mIsBusy = false;
+    return mHead.mAxises[aAxisId].mValue;
 }
 
 void Printer::moving()
 {
-
+    if(!mHead.makeStep())
+        mIsBusy = false;
+    else
+        emit signalStateChanged(mHead);
 }
 
-void Printer::initialize()
-{
-    int i(0);
-    while( ++i <= AXIS_COUNT )
-        mHead.mAxises.pushBack(PrinterHeadAxis());
-}
+

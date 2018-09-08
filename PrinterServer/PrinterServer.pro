@@ -28,14 +28,16 @@ SOURCES += \
         mainwindow.cpp \
     TCPServer.cpp \
     TCPConnection.cpp \
-    Printer.cpp
+    Printer.cpp \
+    PrinterView.cpp
 
 HEADERS += \
         mainwindow.h \
     TCPServer.h \
     TCPConnection.h \
     Commands.h \
-    Printer.h
+    Printer.h \
+    PrinterView.h
 
 FORMS += \
         mainwindow.ui
