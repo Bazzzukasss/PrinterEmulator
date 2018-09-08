@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     else
         ui->mServerInfoEdit->append("Server started.");
 
-    pPRINTER->moveHead(0,20,1,Qt::blue);
+    pPRINTER->moveHead(0,120,1,Qt::blue);
     pPRINTER->moveHead(1,20,-1,Qt::blue);
 }
 

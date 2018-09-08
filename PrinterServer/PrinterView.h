@@ -24,12 +24,14 @@ private:
     QGraphicsScene* mScene;
     int mOldX;
     int mOldY;
-    double mAngleX{-30.0};
-    double mAngleZ{60.0};
-    double mOldAngleX{-30.0};
-    double mOldAngleZ{60.0};
+    double mAngleX{0.0};
+    double mAngleZ{0.0};
+    double mOldAngleX{0.0};
+    double mOldAngleZ{0.0};
 
     void applyTransformation();
+    QGraphicsEllipseItem* mHead;
+    QGraphicsRectItem* mPlatform;
 };
 
 #endif // PRINTERVIEW_H

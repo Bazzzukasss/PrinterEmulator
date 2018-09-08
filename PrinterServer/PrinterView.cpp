@@ -1,6 +1,8 @@
 #include "PrinterView.h"
 #include "Printer.h"
 #include <QDebug>
+#include <QGraphicsLineItem>
+#include "Commands.h"
 
 PrinterView::PrinterView(QWidget *parent)
     :QGraphicsView(parent)
@@ -8,17 +10,32 @@ PrinterView::PrinterView(QWidget *parent)
     mScene = new QGraphicsScene(this);
     setScene(mScene);
     //mScene->setSceneRect(0,0,width(),height());
-    applyTransformation();
 
-    mScene->addRect(0,0,200,200);
+    mPlatform = mScene->addRect(0,0,300,300,QPen(QBrush(Qt::black),3),QBrush(Qt::gray));
+    mHead = mScene->addEllipse(0,0,20,20,QPen(Qt::red),QBrush(Qt::red));
 }
 
 void PrinterView::slotShowPrinter(const PrinterHead& aHead)
 {
+    static int prevX(0);
+    static int prevY(0);
+    int x,y,size;
+    QColor color;
 
+    x = aHead.mAxises[AXIS_X].mValue;
+    y = aHead.mAxises[AXIS_Y].mValue;
+    size = aHead.mAxises[AXIS_Z].mValue;
+    color = aHead.mColor;
+
+    mHead->setPos(x-10,y-10);
+    mHead->setScale(size/100.0 + 1.0);
+    if((x!=prevX)||(y!=prevY))
+    {
+        mScene->addLine(prevX,prevY,x,y,QPen(QBrush(color),3));
+        prevX = x;
+        prevY = y;
+    }
 }
-
-
 
 void PrinterView::mousePressEvent(QMouseEvent *event)
 {
@@ -38,7 +55,6 @@ void PrinterView::mouseMoveEvent(QMouseEvent *event)
     mAngleZ = mOldAngleZ + (mOldY - cursor().pos().y())/1.0;
 
     applyTransformation();
-    qDebug()<< mAngleX << mAngleZ;
 }
 
 void PrinterView::applyTransformation()
