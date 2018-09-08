@@ -1,13 +1,16 @@
 #include "ControlFrame.h"
 #include "ui_ControlFrame.h"
+#include <QColorDialog>
 
 ControlFrame::ControlFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::ControlFrame)
 {
     ui->setupUi(this);
-    connect(ui->mButtonDec, &QPushButton::clicked, this, [&](){ move(-1); });
-    connect(ui->mButtonInc, &QPushButton::clicked, this, [&](){ move(1); });
+    showColor();
+    connect(ui->mButtonDec,   &QPushButton::clicked, this, [&](){ move(-1); });
+    connect(ui->mButtonInc,   &QPushButton::clicked, this, [&](){ move(1); });
+    connect(ui->mButtonColor, &QPushButton::clicked, this, [&](){ selectColor(); showColor(); });
 }
 
 ControlFrame::~ControlFrame()
@@ -32,7 +35,16 @@ void ControlFrame::setId(int aId)
 
 void ControlFrame::move(int aDirection)
 {
-    short int distance = ui->mSpinDistance->value() * aDirection;
-    char color = ui->mSpinColor->value();
-    emit signalMove(mId,distance,color);
+    short int stepsCount = ui->mSpinDistance->value();
+    emit signalMove(mId,stepsCount,aDirection,mColor);
+}
+
+void ControlFrame::selectColor()
+{
+    mColor = QColorDialog::getColor();
+}
+
+void ControlFrame::showColor()
+{
+    ui->mButtonColor->setStyleSheet(QString("background-color:%1").arg(mColor.name(QColor::NameFormat::HexArgb)));
 }

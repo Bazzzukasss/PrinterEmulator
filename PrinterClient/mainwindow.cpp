@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mControlFrameY->setValue(0);
     ui->mControlFrameY->setId(AXIS_Y);
 
-    ui->mControlFrameZ->setCaption("Z:");
+    ui->mControlFrameZ->setCaption("Size:");
     ui->mControlFrameZ->setValue(0);
     ui->mControlFrameZ->setId(AXIS_Z);
 
@@ -57,21 +57,26 @@ void MainWindow::slotSendGetDataCommand()
 void MainWindow::fillData(QByteArray &aByteArray, Command &aCmd)
 {
     aByteArray.append((char*)&aCmd, sizeof(Command));
-    qDebug()<<sizeof(Command);
-    qDebug()<<aByteArray.size();
+    //qDebug()<<sizeof(Command);
+    //qDebug()<<aByteArray.size();
 }
 
-void MainWindow::slotSendRunMovementCommand(int aAxisId, int aDistance, int aColor)
+void MainWindow::slotSendRunMovementCommand(int aAxisId, int aStepsCount, int aDirection, QColor aColor)
 {
     Command cmd;
+    int r,g,b;
+    aColor.getRgb(&r,&g,&b);
     cmd.mType = CMD_MOVE;
     cmd.data.cmdMove.mAxisId = aAxisId;
-    cmd.data.cmdMove.mDistance = aDistance;
-    cmd.data.cmdMove.mColor = aColor;
+    cmd.data.cmdMove.mStepsCount = aStepsCount;
+    cmd.data.cmdMove.mDirection = aDirection;
+    cmd.data.cmdMove.mColorR = r;
+    cmd.data.cmdMove.mColorG = g;
+    cmd.data.cmdMove.mColorB = b;
 
+    qDebug()<<aColor;
     QByteArray data;
     fillData(data,cmd);
-    qDebug()<<data;
 
     mClient.sendData(data);
 }

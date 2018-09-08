@@ -27,7 +27,7 @@ void PrinterView::slotShowPrinter(const PrinterHead& aHead)
     size = aHead.mAxises[AXIS_Z].mValue;
     color = aHead.mColor;
 
-    mHead->setPos(x-10,y-10);
+    mHead->setPos(x-10, y-10);
     mHead->setScale(size/100.0 + 1.0);
     if((x!=prevX)||(y!=prevY))
     {

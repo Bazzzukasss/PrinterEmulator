@@ -6,7 +6,7 @@ Printer::Printer(QObject *parent)
     : QObject(parent)
 {
     int i(0);
-    QString names[AXIS_COUNT]={"X","Y","Z"};
+    QString names[AXIS_COUNT]={"X","Y","Size"};
     while( ++i <= AXIS_COUNT )
         mHead.mAxises.push_back(PrinterHeadAxis( i-1 , names[i-1]));
 

@@ -19,7 +19,7 @@ public:
 
 private slots:
     void slotConnectToHost();
-    void slotSendRunMovementCommand(int aAxisId, int aDistance, int aColor);
+    void slotSendRunMovementCommand(int aAxisId, int aStepsCount, int aDirection, QColor aColor);
     void slotSendRunResetCommand();
     void slotSendGetDataCommand();
 

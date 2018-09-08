@@ -48,7 +48,7 @@ struct PrinterHead
     QStringList getInformation() const{
         QStringList list;
         for(auto& axis : mAxises)
-            list << axis.getInformation();
+            list << axis.getInformation() + " \tColor: " + mColor.name(QColor::NameFormat::HexArgb);
         return list;
     }
 };

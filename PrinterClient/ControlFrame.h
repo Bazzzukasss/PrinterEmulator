@@ -20,12 +20,15 @@ public:
     void setId(int aId);
 
 signals:
-    void signalMove(int aId, int aDistance, int aColor);
+    void signalMove(int aAxisId, int aStepsCount, int aDirection, QColor aColor);
 
 private:
     Ui::ControlFrame *ui;
     void move(int aDirection);
+    void selectColor();
+    void showColor();
     int mId{0};
+    QColor mColor{Qt::blue};
 };
 
 #endif // CONTROLFRAME_H
