@@ -30,7 +30,7 @@ bool Printer::moveHead(int aAxisId, int aStepsCount, int aDirection, QColor aCol
     return true;
 }
 
-int Printer::getCurrentPosition(int aAxisId)
+int Printer::getSensorValue(int aAxisId)
 {
     return mHead.mAxises[aAxisId].mValue;
 }

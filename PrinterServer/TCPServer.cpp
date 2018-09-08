@@ -27,21 +27,25 @@ void TCPServer::slotDataHandler(const QByteArray &aData)
     Command* cmd = (Command*)(aData.data());
     switch(cmd->mType)
     {
-        case CMD_GET:
+        case CMD_GET_SENSORS:
+                pConnection->sendSensorValueAnswer( cmd->data.cmdGetSensors.mSensorId, pPRINTER->getSensorValue(cmd->data.cmdGetSensors.mSensorId) );
             break;
+
         case CMD_SET:
             break;
+
         case CMD_MOVE:
-            result = pPRINTER->moveHead(
-                                        cmd->data.cmdMove.mAxisId,
-                                        cmd->data.cmdMove.mStepsCount,
-                                        cmd->data.cmdMove.mDirection,
-                                        QColor(cmd->data.cmdMove.mColorR,cmd->data.cmdMove.mColorG,cmd->data.cmdMove.mColorB)
-                                      );
+                result = pPRINTER->moveHead(
+                                            cmd->data.cmdMove.mAxisId,
+                                            cmd->data.cmdMove.mStepsCount,
+                                            cmd->data.cmdMove.mDirection,
+                                            QColor(cmd->data.cmdMove.mColorR,cmd->data.cmdMove.mColorG,cmd->data.cmdMove.mColorB)
+                                          );
+                if(result)
+                    pConnection->sendResultAnswer(RES_CMD_ACCEPTED);
+                else
+                    pConnection->sendResultAnswer(RES_SERVER_BUSY);
             break;
     }
-    if(result)
-        pConnection->sendAnswer(1);
-    else
-        pConnection->sendAnswer(0);
+
 }

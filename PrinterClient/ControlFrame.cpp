@@ -33,6 +33,11 @@ void ControlFrame::setId(int aId)
     mId = aId;
 }
 
+int ControlFrame::getId()
+{
+    return mId;
+}
+
 void ControlFrame::move(int aDirection)
 {
     short int stepsCount = ui->mSpinDistance->value();

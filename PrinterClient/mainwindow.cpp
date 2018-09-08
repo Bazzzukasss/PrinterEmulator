@@ -3,6 +3,7 @@
 #include <QTimer>
 #include "../PrinterServer/Commands.h"
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -21,14 +22,26 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->mControlFrameZ->setValue(0);
     ui->mControlFrameZ->setId(AXIS_Z);
 
-    connect(ui->mControlFrameX,&ControlFrame::signalMove,this,&MainWindow::slotSendRunMovementCommand);
-    connect(ui->mControlFrameY,&ControlFrame::signalMove,this,&MainWindow::slotSendRunMovementCommand);
-    connect(ui->mControlFrameZ,&ControlFrame::signalMove,this,&MainWindow::slotSendRunMovementCommand);
+    mControlFrames.push_back(ui->mControlFrameX);
+    mControlFrames.push_back(ui->mControlFrameY);
+    mControlFrames.push_back(ui->mControlFrameZ);
 
-    connect(ui->mButtonConnect,&QPushButton::clicked,this,&MainWindow::slotConnectToHost);
-    connect(&mClient,&TCPClient::signalInformation,this,[&](const QString& aInformation){ ui->mLog->append(aInformation); });
+    connect(ui->mControlFrameX, &ControlFrame::signalMove,   &mClient,   &TCPClient::slotSendRunMovementCommand);
+    connect(ui->mControlFrameY, &ControlFrame::signalMove,   &mClient,   &TCPClient::slotSendRunMovementCommand);
+    connect(ui->mControlFrameZ, &ControlFrame::signalMove,   &mClient,   &TCPClient::slotSendRunMovementCommand);
+
+    connect(ui->mButtonConnect,&QPushButton::clicked,   this,   &MainWindow::slotConnectToHost);
+    connect(&mClient,&TCPClient::signalInformation,     this,   &MainWindow::slotShowInforamtion);
+    connect(&mClient,&TCPClient::signalShowSensor,      this,   &MainWindow::slotShowSensor);
 
     slotConnectToHost();
+
+    auto timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, [&](){
+            for(auto frame : mControlFrames)
+                mClient.slotSendGetSensorsCommand(frame->getId());
+    });
+    timer->start(1000);
 }
 
 MainWindow::~MainWindow()
@@ -38,45 +51,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::slotConnectToHost()
 {
-    int port(ui->mSpinPort->value());
-    QHostAddress address(ui->mLinrEditAddress->text());
-
-    mClient.connectToHost(address,port);
+    mClient.connectToHost( QHostAddress(ui->mLinrEditAddress->text()), ui->mSpinPort->value() );
 }
 
-void MainWindow::slotSendRunResetCommand()
+void MainWindow::slotShowInforamtion(const QString &aInformation)
 {
-
+    ui->mLog->append(aInformation);
 }
 
-void MainWindow::slotSendGetDataCommand()
+void MainWindow::slotShowSensor(int aSensorId, int aSensorValue)
 {
-
+    for(auto frame : mControlFrames)
+        if(frame->getId() == aSensorId)
+            frame->setValue(aSensorValue);
 }
 
-void MainWindow::fillData(QByteArray &aByteArray, Command &aCmd)
-{
-    aByteArray.append((char*)&aCmd, sizeof(Command));
-    //qDebug()<<sizeof(Command);
-    //qDebug()<<aByteArray.size();
-}
 
-void MainWindow::slotSendRunMovementCommand(int aAxisId, int aStepsCount, int aDirection, QColor aColor)
-{
-    Command cmd;
-    int r,g,b;
-    aColor.getRgb(&r,&g,&b);
-    cmd.mType = CMD_MOVE;
-    cmd.data.cmdMove.mAxisId = aAxisId;
-    cmd.data.cmdMove.mStepsCount = aStepsCount;
-    cmd.data.cmdMove.mDirection = aDirection;
-    cmd.data.cmdMove.mColorR = r;
-    cmd.data.cmdMove.mColorG = g;
-    cmd.data.cmdMove.mColorB = b;
-
-    qDebug()<<aColor;
-    QByteArray data;
-    fillData(data,cmd);
-
-    mClient.sendData(data);
-}

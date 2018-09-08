@@ -67,7 +67,7 @@ public:
     }
 
     bool moveHead(int aAxisId, int aStepsCount, int aDirection, QColor aColor);
-    int getCurrentPosition(int aAxisId);
+    int getSensorValue(int aAxisId);
 
 signals:
     void signalStateChanged(const PrinterHead& aHead);

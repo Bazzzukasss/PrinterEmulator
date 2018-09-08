@@ -68,9 +68,61 @@ void TCPClient::initialize()
     connect(mpSocket, &QTcpSocket::bytesWritten,this, &TCPClient::bytesWritten);
 }
 
+
+void TCPClient::slotSendRunMovementCommand(int aAxisId, int aStepsCount, int aDirection, QColor aColor)
+{
+    Command cmd;
+    int r,g,b;
+
+    aColor.getRgb(&r,&g,&b);
+    cmd.mType = CMD_MOVE;
+    cmd.data.cmdMove.mAxisId = aAxisId;
+    cmd.data.cmdMove.mStepsCount = aStepsCount;
+    cmd.data.cmdMove.mDirection = aDirection;
+    cmd.data.cmdMove.mColorR = r;
+    cmd.data.cmdMove.mColorG = g;
+    cmd.data.cmdMove.mColorB = b;
+
+    sendCommand(cmd);
+}
+
+void TCPClient::slotSendGetSensorsCommand(int aSensorId)
+{
+    Command cmd;
+    cmd.mType = CMD_GET_SENSORS;
+    cmd.data.cmdGetSensors.mSensorId = aSensorId;
+
+    sendCommand(cmd);
+}
+
+void TCPClient::slotDataHandler(const QByteArray &aData)
+{
+    Answer* ans = (Answer*)(aData.data());
+    switch(ans->mType)
+    {
+        case ANS_RESULT:
+                if(ans->data.ansResult.mDescription == RES_CMD_ACCEPTED)
+                    emit signalInformation("[Ok] Command accepted.");
+                else
+                    emit signalInformation("[Error] Server busy!");
+            break;
+
+        case ANS_SENSORS:
+                emit signalShowSensor(ans->data.ansSensors.mId,ans->data.ansSensors.mValue);
+            break;
+    }
+}
+
+void TCPClient::sendCommand(const Command& aCmd)
+{
+    QMutexLocker locker(&mMutex);
+    QByteArray data;
+    data.append((char*)&aCmd, sizeof(Command));
+    sendData(data);
+}
+
 bool TCPClient::connectToHost(QHostAddress aIp, int aPort, int aTimeout)
 {
-
     mIp = aIp;
     mPort = aPort;
     mTimeout = aTimeout;

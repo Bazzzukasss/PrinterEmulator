@@ -5,6 +5,8 @@
 #include "TCPClient.h"
 #include "../PrinterServer/Commands.h"
 
+class ControlFrame;
+
 namespace Ui {
 class MainWindow;
 }
@@ -19,15 +21,15 @@ public:
 
 private slots:
     void slotConnectToHost();
-    void slotSendRunMovementCommand(int aAxisId, int aStepsCount, int aDirection, QColor aColor);
-    void slotSendRunResetCommand();
-    void slotSendGetDataCommand();
+    void slotShowInforamtion(const QString& aInformation);
+    void slotShowSensor(int aSensorId, int aSensorValue);
 
 private:
     Ui::MainWindow *ui;
     TCPClient mClient;
+    QVector<ControlFrame*> mControlFrames;
 
-    void fillData(QByteArray& aByteArray, Command &aCmd);
+
 };
 
 #endif // MAINWINDOW_H

@@ -5,6 +5,9 @@
 #include <QTcpSocket>
 #include <QMutex>
 #include <QHostAddress>
+#include "../PrinterServer/Commands.h"
+#include <QColor>
+
 const int default_timeout = 1000;
 
 class TCPClient : public QObject
@@ -25,29 +28,33 @@ class TCPClient : public QObject
 
     public slots:
        void reciveHandler();
+       void slotSendRunMovementCommand(int aAxisId, int aStepsCount, int aDirection, QColor aColor);
+       void slotSendGetSensorsCommand(int aSensorId);
+       void slotDataHandler(const QByteArray& aData);
 
     signals:
        void signalCoreConnected();
        void signalCoreDisconnected();
        void signalDataReceived(const QByteArray& aData);
        void signalInformation(const QString& aInformation);
+       void signalShowSensor(int aSensorId, int aSensorValue);
 
     protected:
        int mPort;
        QHostAddress mIp;
        int mTimeout{default_timeout};
        QTcpSocket *mpSocket;
-       QMutex mMutex;
 
        virtual void handler(const QByteArray &aData);
        virtual void connected();
        virtual void disconnected();
        virtual void bytesWritten(qint64 bytes);
+       void sendCommand(const Command& aCmd);
 
     private:
        bool isConnected;
        void initialize();
-
+       QMutex mMutex;
 };
 
 #endif // TCPCLIENT_H

@@ -18,6 +18,7 @@ public:
     void setCaption(const QString& aCaption);
     void setValue(int aValue);
     void setId(int aId);
+    int getId();
 
 signals:
     void signalMove(int aAxisId, int aStepsCount, int aDirection, QColor aColor);

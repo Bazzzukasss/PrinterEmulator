@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QHostAddress>
+#include "Commands.h"
 
 class QTcpSocket;
 
@@ -13,7 +14,8 @@ public:
     TCPConnection(QTcpSocket* aSocket, QObject* parent = nullptr);
     QHostAddress getClientAddress() const;
     int getId() const;
-    void sendAnswer(int aAnswer);
+    void sendResultAnswer(int aDescription);
+    void sendSensorValueAnswer(int aSensorId, int aValue);
 
 signals:
     void signalInformation(const QString& aInformation);
@@ -27,6 +29,8 @@ private slots:
 
 private:
     QTcpSocket* mpSocket;
+
+    void sendAnswer(const Answer &ans);
 };
 
 #endif // TCPCONNECTION_H
