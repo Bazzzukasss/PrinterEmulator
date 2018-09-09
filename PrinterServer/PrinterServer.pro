@@ -29,7 +29,8 @@ SOURCES += \
     TCPServer.cpp \
     TCPConnection.cpp \
     Printer.cpp \
-    PrinterView.cpp
+    PrinterView.cpp \
+    PrinterWorker.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -37,7 +38,8 @@ HEADERS += \
     TCPConnection.h \
     Printer.h \
     PrinterView.h \
-    Protocol.h
+    Protocol.h \
+    PrinterWorker.h
 
 FORMS += \
         mainwindow.ui

@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QTimer>
 #include "../PrinterServer/Protocol.h"
 
 
@@ -36,12 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     slotConnectToHost();
 
-    auto timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [&](){
-            for(auto frame : mControlFrames)
-                mClient.slotSendGetSensorsCommand(frame->getId());
-    });
-    timer->start(500);
+    this->startTimer(500);
 }
 
 MainWindow::~MainWindow()
@@ -66,4 +60,8 @@ void MainWindow::slotShowSensor(int aSensorId, int aSensorValue)
             frame->setValue(aSensorValue);
 }
 
-
+void MainWindow::timerEvent(QTimerEvent*)
+{
+    for(auto frame : mControlFrames)
+        mClient.slotSendGetSensorsCommand(frame->getId());
+}

@@ -4,8 +4,7 @@
 #include <QObject>
 #include <QColor>
 #include <QVector>
-
-class QTimer;
+#include <QThread>
 
 #define pPRINTER Printer::getInstance()
 
@@ -55,11 +54,11 @@ struct PrinterHead
 
 Q_DECLARE_METATYPE(PrinterHead)
 
-
 class Printer : public QObject
 {
     Q_OBJECT
 public:
+    ~Printer();
     static Printer* getInstance()
     {
         static Printer printer;
@@ -68,14 +67,16 @@ public:
 
     bool moveHead(int aAxisId, int aStepsCount, int aDirection, QColor aColor);
     int getSensorValue(int aAxisId);
+    bool makeStep();
 
 signals:
     void signalStateChanged(const PrinterHead& aHead);
+    void signalStartWorker();
 
 private:
     PrinterHead mHead;
     volatile bool mIsBusy{false};
-    QTimer* mTimer;
+    QThread mWorkerThread;
 
     void moving();
 

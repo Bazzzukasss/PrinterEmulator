@@ -1,6 +1,6 @@
 #include "Printer.h"
 #include "Protocol.h"
-#include <QTimer>
+#include "PrinterWorker.h"
 
 Printer::Printer(QObject *parent)
     : QObject(parent)
@@ -10,9 +10,19 @@ Printer::Printer(QObject *parent)
     while( ++i <= AXIS_COUNT )
         mHead.mAxises.push_back(PrinterHeadAxis( i-1 , names[i-1]));
 
-    mTimer = new QTimer(this);
-    connect(mTimer, &QTimer::timeout, this, [&](){ moving(); });
-    mTimer->start(100);
+    auto *pWorker = new PrinterWorker();
+    pWorker->moveToThread(&mWorkerThread);
+    connect(&mWorkerThread, &QThread::finished,             pWorker,    &QObject::deleteLater);
+    connect(this, &Printer::signalStartWorker,              pWorker,    &PrinterWorker::slotStart);
+
+    mWorkerThread.start();
+    emit signalStartWorker();
+}
+
+Printer::~Printer()
+{
+    mWorkerThread.quit();
+    mWorkerThread.wait();
 }
 
 bool Printer::moveHead(int aAxisId, int aStepsCount, int aDirection, QColor aColor)
@@ -33,6 +43,17 @@ bool Printer::moveHead(int aAxisId, int aStepsCount, int aDirection, QColor aCol
 int Printer::getSensorValue(int aAxisId)
 {
     return mHead.mAxises[aAxisId].mValue;
+}
+
+bool Printer::makeStep()
+{
+    bool res = mHead.makeStep();
+    if(res)
+        emit signalStateChanged(mHead);
+    else
+        mIsBusy = false;
+
+    return res;
 }
 
 void Printer::moving()
