@@ -18,10 +18,37 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Printer Server</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#centralWidget{
+	border-image: url(:/img/metal.jpg) 0 0 0 0 stretch stretch;
+}
+
+QWidget#mView{
+	background-color: transparent;
+	border: none;
+}
+
+QTextEdit#mPrinterInfoEdit{
+	font-size: 10pt;
+}
+
+QTextEdit{
+	font-size: 8pt;
+	font-weight: bold;
+	border: 2px solid grey;
+	border-radius: 6px;   
+	background-color: rgb(245, 245, 245);
+	padding: 4px;
+}
+</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>9</number>
+    </property>
     <item>
      <widget class="QTextEdit" name="mServerInfoEdit">
       <property name="sizePolicy">
@@ -33,9 +60,12 @@
       <property name="font">
        <font>
         <pointsize>8</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
+        <weight>75</weight>
+        <bold>true</bold>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>Server log</string>
       </property>
      </widget>
     </item>
@@ -48,7 +78,7 @@
        </size>
       </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::NoFrame</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
@@ -74,6 +104,9 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="toolTip">
+          <string>Use mouse to rotate view</string>
+         </property>
         </widget>
        </item>
        <item>
@@ -87,13 +120,18 @@
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>60</height>
+           <height>70</height>
           </size>
          </property>
          <property name="font">
           <font>
            <pointsize>10</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
+         </property>
+         <property name="toolTip">
+          <string>Printer state</string>
          </property>
         </widget>
        </item>

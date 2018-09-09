@@ -10,10 +10,10 @@ Printer::Printer(QObject *parent)
     while( ++i <= AXIS_COUNT )
         mHead.mAxises.push_back(PrinterHeadAxis( i-1 , names[i-1]));
 
-    auto *pWorker = new PrinterWorker();
-    pWorker->moveToThread(&mWorkerThread);
-    connect(&mWorkerThread, &QThread::finished,             pWorker,    &QObject::deleteLater);
-    connect(this, &Printer::signalStartWorker,              pWorker,    &PrinterWorker::slotStart);
+    mpWorker = new PrinterWorker();
+    mpWorker->moveToThread(&mWorkerThread);
+    connect(&mWorkerThread, &QThread::finished,             mpWorker,    &QObject::deleteLater);
+    connect(this, &Printer::signalStartWorker,              mpWorker,    &PrinterWorker::slotStart);
 
     mWorkerThread.start();
     emit signalStartWorker();
@@ -21,6 +21,7 @@ Printer::Printer(QObject *parent)
 
 Printer::~Printer()
 {
+    mpWorker->stop();
     mWorkerThread.quit();
     mWorkerThread.wait();
 }

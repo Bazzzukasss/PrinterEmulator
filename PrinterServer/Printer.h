@@ -6,6 +6,8 @@
 #include <QVector>
 #include <QThread>
 
+class PrinterWorker;
+
 #define pPRINTER Printer::getInstance()
 
 struct PrinterHeadAxis{
@@ -77,6 +79,7 @@ private:
     PrinterHead mHead;
     volatile bool mIsBusy{false};
     QThread mWorkerThread;
+    PrinterWorker* mpWorker;
 
     void moving();
 

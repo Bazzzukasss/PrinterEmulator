@@ -38,3 +38,6 @@ HEADERS += \
 FORMS += \
         mainwindow.ui \
     ControlFrame.ui
+
+RESOURCES += \
+    res.qrc

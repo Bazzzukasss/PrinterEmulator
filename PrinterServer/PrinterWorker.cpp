@@ -10,9 +10,14 @@ PrinterWorker::PrinterWorker(QObject *parent)
 
 }
 
+void PrinterWorker::stop()
+{
+    isStoped = true;
+}
+
 void PrinterWorker::slotStart()
 {
-    while(true)
+    while(!isStoped)
     {
         pPRINTER->makeStep();
         std::this_thread::sleep_for(100ms);

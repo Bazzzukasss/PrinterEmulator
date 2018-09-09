@@ -6,19 +6,35 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
+    <width>355</width>
     <height>64</height>
    </rect>
   </property>
-  <property name="font">
-   <font>
-    <pointsize>12</pointsize>
-    <weight>75</weight>
-    <bold>true</bold>
-   </font>
-  </property>
   <property name="windowTitle">
    <string>Frame</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton#mButtonInc{
+	image: url(:/img/button_add.png);
+	border: none;
+}
+QPushButton#mButtonInc:pressed{
+	image: url(:/img/button_add_.png); 
+	border: none;
+}
+
+QPushButton#mButtonDec{
+	image: url(:/img/button_del.png);
+	border: none;
+}
+QPushButton#mButtonDec:pressed{
+	image: url(:/img/button_del_.png);
+	border: none;
+}
+QSpinBox,QPushButton#mButtonColor{
+	border: 2px solid grey;
+	border-radius: 6px; 
+}</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="leftMargin">
@@ -54,6 +70,9 @@
        <height>0</height>
       </size>
      </property>
+     <property name="toolTip">
+      <string>Sensor value</string>
+     </property>
      <property name="text">
       <string>Value</string>
      </property>
@@ -73,8 +92,8 @@
        <height>64</height>
       </size>
      </property>
-     <property name="text">
-      <string>&lt;</string>
+     <property name="styleSheet">
+      <string notr="true"/>
      </property>
     </widget>
    </item>
@@ -122,8 +141,14 @@
           <height>32</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Value</string>
+        </property>
         <property name="frame">
          <bool>true</bool>
+        </property>
+        <property name="buttonSymbols">
+         <enum>QAbstractSpinBox::NoButtons</enum>
         </property>
         <property name="suffix">
          <string/>
@@ -138,6 +163,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="mButtonColor">
+        <property name="toolTip">
+         <string>Color selection</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -160,8 +188,14 @@
        <height>64</height>
       </size>
      </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="text">
-      <string>&gt;</string>
+      <string/>
      </property>
     </widget>
    </item>

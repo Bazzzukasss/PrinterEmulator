@@ -13,10 +13,46 @@
   <property name="font">
    <font>
     <pointsize>12</pointsize>
+    <weight>75</weight>
+    <bold>true</bold>
    </font>
   </property>
   <property name="windowTitle">
    <string>Printer Client</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget#centralWidget{
+	border-image: url(:/img/metal.jpg) 0 0 0 0 stretch stretch;
+}
+QWidget{
+	font-size: 12pt;
+	font-weight: bold;
+}
+QTextEdit#mLog{
+	font-size: 8pt;
+	font-weight: bold;
+}
+QSpinBox,QLineEdit#mLineEditAddress{
+	border: 2px solid grey;
+	border-radius: 6px;   
+	background-color: rgb(245, 245, 245);
+}
+QPushButton#mButtonConnect{
+	border: 2px solid grey;
+	border-radius: 6px; 	  	
+	background-color: rgb(190, 190, 255);
+}
+
+QPushButton#mButtonConnect:pressed{
+	background-color: rgb(220, 220, 255);
+}
+QTextEdit{
+	border: 2px solid grey;
+	border-radius: 6px;   
+	background-color: rgb(245, 245, 245);
+	padding: 4px;
+}
+</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -75,9 +111,13 @@
         <widget class="QCheckBox" name="mCheckBoxSensors">
          <property name="font">
           <font>
+           <pointsize>12</pointsize>
            <weight>75</weight>
            <bold>true</bold>
           </font>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::RightToLeft</enum>
          </property>
          <property name="text">
           <string>Get sensors value</string>
@@ -95,7 +135,12 @@
       <property name="font">
        <font>
         <pointsize>8</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
        </font>
+      </property>
+      <property name="toolTip">
+       <string>Client log</string>
       </property>
       <property name="readOnly">
        <bool>true</bool>
@@ -131,7 +176,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="mLinrEditAddress">
+        <widget class="QLineEdit" name="mLineEditAddress">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Server address</string>
+         </property>
          <property name="text">
           <string>127.0.0.1</string>
          </property>
@@ -153,6 +207,18 @@
        </item>
        <item>
         <widget class="QSpinBox" name="mSpinPort">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Server port</string>
+         </property>
+         <property name="buttonSymbols">
+          <enum>QAbstractSpinBox::NoButtons</enum>
+         </property>
          <property name="maximum">
           <number>9999</number>
          </property>
@@ -163,6 +229,21 @@
        </item>
        <item>
         <widget class="QPushButton" name="mButtonConnect">
+         <property name="minimumSize">
+          <size>
+           <width>80</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Connect to server</string>
+         </property>
          <property name="text">
           <string>Connect</string>
          </property>

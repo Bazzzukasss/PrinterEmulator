@@ -45,7 +45,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::slotConnectToHost()
 {
-    mClient.connectToHost( QHostAddress(ui->mLinrEditAddress->text()), ui->mSpinPort->value() );
+    mClient.connectToHost( QHostAddress(ui->mLineEditAddress->text()), ui->mSpinPort->value() );
 }
 
 void MainWindow::slotShowInforamtion(const QString &aInformation, InfoMessageType aType)

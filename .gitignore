@@ -112,3 +112,7 @@
 /build-PrinterServer-Desktop_Qt_5_10_1_MSVC2015_64bit-Release/release/moc_PrinterWorker.cpp
 /build-PrinterServer-Desktop_Qt_5_10_1_MSVC2015_64bit-Release/release/moc_PrinterWorker.obj
 /build-PrinterServer-Desktop_Qt_5_10_1_MSVC2015_64bit-Release/release/PrinterWorker.obj
+/build-PrinterClient-Desktop_Qt_5_10_1_MSVC2015_64bit-Release/release/qrc_res.cpp
+/build-PrinterClient-Desktop_Qt_5_10_1_MSVC2015_64bit-Release/release/qrc_res.obj
+/build-PrinterServer-Desktop_Qt_5_10_1_MSVC2015_64bit-Release/release/qrc_res.cpp
+/build-PrinterServer-Desktop_Qt_5_10_1_MSVC2015_64bit-Release/release/qrc_res.obj
