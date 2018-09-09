@@ -16,9 +16,6 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->mServerInfoEdit->append("[Error]\tServer could not start.");
     else
         ui->mServerInfoEdit->append("Server started.");
-
-    pPRINTER->moveHead(0,10,1,Qt::green);
-    //pPRINTER->moveHead(1,20,-1,Qt::blue);
 }
 
 MainWindow::~MainWindow()
@@ -33,7 +30,37 @@ void MainWindow::slotShowPrinterInformation(const PrinterHead &aHead)
         ui->mPrinterInfoEdit->append( str );
 }
 
-void MainWindow::slotShowServerInformation(const QString &aInformation)
+void MainWindow::slotShowServerInformation(const QString &aInformation, InfoMessageType aType = MT_INFO)
 {
-    ui->mServerInfoEdit->append(aInformation);
+    QString color,brackets;
+    switch(aType)
+    {
+        case MT_INFO:
+            color= "#000000";
+            brackets = "b";
+        break;
+
+        case MT_HINT:
+            color= "#333333";
+            brackets = "i";
+        break;
+
+        case MT_ERROR:
+            color= "#ff0000";
+            brackets = "b";
+        break;
+
+        case MT_OK:
+            color= "#0000ff";
+            brackets = "b";
+        break;
+
+        default:
+            color= "#000000";
+            brackets = "b";
+        break;
+
+    }
+    QString line = QString("<%1><font color=%2>%0</font></%1>").arg(aInformation).arg(brackets).arg(color);
+    ui->mServerInfoEdit->append(line);
 }

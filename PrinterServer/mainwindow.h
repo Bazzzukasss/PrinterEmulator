@@ -20,7 +20,7 @@ public:
 
 private slots:
     void slotShowPrinterInformation(const PrinterHead& aHead);
-    void slotShowServerInformation(const QString& aInformation);
+    void slotShowServerInformation(const QString& aInformation, InfoMessageType aType);
 
 private:
     Ui::MainWindow *ui;

@@ -30,7 +30,7 @@ void TCPClient::reciveHandler()
     QByteArray data;
 
     data.append( mpSocket->readAll() );
-    emit signalInformation(QString("[Received]\t%1").arg(data.size()));
+    emit signalInformation(QString("\t[Reseived]\t%1 bytes.").arg(data.size()),MT_HINT);
     emit signalDataReceived(data);
 
     dataHandler(data);
@@ -51,7 +51,7 @@ void TCPClient::disconnected()
 
 void TCPClient::bytesWritten(qint64 bytes)
 {
-    emit signalInformation(QString("[Written]\t%1 bytes.").arg(bytes));
+    emit signalInformation(QString("\t[Sended]\t%1 bytes.").arg(bytes),MT_HINT);
 }
 
 void TCPClient::initialize()
@@ -100,9 +100,9 @@ void TCPClient::dataHandler(const QByteArray &aData)
         {
             case ANS_RESULT:
                     if(ans->data.ansResult.mDescription == RES_CMD_ACCEPTED)
-                        emit signalInformation("[Ok] Command accepted.");
+                        emit signalInformation("[Ok] Command accepted.",MT_OK);
                     else
-                        emit signalInformation("[Error] Server busy!");
+                        emit signalInformation("[Error] Server busy!",MT_ERROR);
                 break;
 
             case ANS_SENSORS:
@@ -126,7 +126,7 @@ bool TCPClient::connectToHost(QHostAddress aIp, int aPort, int aTimeout)
     mIp = aIp;
     mPort = aPort;
     mTimeout = aTimeout;
-    emit signalInformation(QString("[Connecting]\t%1\t%2").arg(mIp.toString()).arg(mPort));
+    emit signalInformation(QString("[Connecting]\t%1\t%2").arg(mIp.toString()).arg(mPort),MT_INFO);
 
     if(isConnected)
         mpSocket->disconnectFromHost();
@@ -134,7 +134,7 @@ bool TCPClient::connectToHost(QHostAddress aIp, int aPort, int aTimeout)
     mpSocket->connectToHost(mIp,mPort);
     isConnected = true;
     if(!mpSocket->waitForConnected(mTimeout)){
-        emit signalInformation(QString("[Error]\t%1").arg(mpSocket->errorString()));
+        emit signalInformation(QString("[Error]\t%1").arg(mpSocket->errorString()),MT_ERROR);
         isConnected = false;
         return false;
     }
@@ -166,16 +166,16 @@ bool TCPClient::connectToHost()
 qint64 TCPClient::sendData(const QByteArray& aData)
 {
     if (!this->isConnected){
-        emit signalInformation(QString("[Error]\tSocket is not connected."));
+        emit signalInformation(QString("[Error]\tSocket is not connected."),MT_ERROR);
         return false;
     }
     bool retval = true;
-    emit signalInformation(QString("[Send Data]\t%1").arg(aData.data()));
+
     qint64 bytesWritten = mpSocket->write(aData);
     mpSocket->flush();
     if( bytesWritten != aData.length() )
     {
-        emit signalInformation(QString("[Error]\tFailed to write whole buffer.%1 != %2").arg(bytesWritten).arg(aData.length()));
+        emit signalInformation(QString("[Error]\tFailed to write whole buffer.%1 != %2").arg(bytesWritten).arg(aData.length()),MT_ERROR);
         retval = false;
     }
     return retval;

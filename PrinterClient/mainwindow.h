@@ -20,7 +20,7 @@ public:
 
 private slots:
     void slotConnectToHost();
-    void slotShowInforamtion(const QString& aInformation);
+    void slotShowInforamtion(const QString& aInformation, InfoMessageType aType = MT_INFO);
     void slotShowSensor(int aSensorId, int aSensorValue);
 
 protected:

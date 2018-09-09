@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTcpServer>
+#include <TCPConnection.h>
 
 class TCPServer : public QTcpServer
 {
@@ -11,7 +12,7 @@ public:
     explicit TCPServer(QObject *parent = nullptr);
 
 signals:
-    void signalInformation(const QString& aInformation);
+    void signalInformation(const QString& aInformation, InfoMessageType aType = MT_INFO);
 
 private slots:
     void slotNewConnection();

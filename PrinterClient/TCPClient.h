@@ -8,6 +8,8 @@
 #include "../PrinterServer/Protocol.h"
 #include <QColor>
 
+enum InfoMessageType{MT_INFO,MT_ERROR,MT_OK,MT_HINT};
+
 const int default_timeout = 1000;
 
 class TCPClient : public QObject
@@ -35,7 +37,7 @@ class TCPClient : public QObject
        void signalCoreConnected();
        void signalCoreDisconnected();
        void signalDataReceived(const QByteArray& aData);
-       void signalInformation(const QString& aInformation);
+       void signalInformation(const QString& aInformation, InfoMessageType aType = MT_INFO);
        void signalShowSensor(int aSensorId, int aSensorValue);
 
     protected:

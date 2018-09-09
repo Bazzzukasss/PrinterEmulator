@@ -6,6 +6,8 @@
 #include "Protocol.h"
 #include <QMutex>
 
+enum InfoMessageType{MT_INFO,MT_ERROR,MT_OK,MT_HINT};
+
 class QTcpSocket;
 
 class TCPConnection : public QObject
@@ -19,7 +21,7 @@ public:
     void sendSensorValueAnswer(int aSensorId, int aValue);
 
 signals:
-    void signalInformation(const QString& aInformation);
+    void signalInformation(const QString& aInformation, InfoMessageType aType = MT_INFO);
     void signalDataReceived(const QByteArray& aData);    
 
 private slots:

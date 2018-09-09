@@ -14,8 +14,7 @@ void PrinterWorker::slotStart()
 {
     while(true)
     {
-        if(pPRINTER->makeStep())
-            qDebug()<<"Steps left";
+        pPRINTER->makeStep();
         std::this_thread::sleep_for(100ms);
     }
 }

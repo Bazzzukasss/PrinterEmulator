@@ -48,9 +48,39 @@ void MainWindow::slotConnectToHost()
     mClient.connectToHost( QHostAddress(ui->mLinrEditAddress->text()), ui->mSpinPort->value() );
 }
 
-void MainWindow::slotShowInforamtion(const QString &aInformation)
+void MainWindow::slotShowInforamtion(const QString &aInformation, InfoMessageType aType)
 {
-    ui->mLog->append(aInformation);
+    QString color,brackets;
+    switch(aType)
+    {
+        case MT_INFO:
+            color= "#000000";
+            brackets = "b";
+        break;
+
+        case MT_HINT:
+            color= "#333333";
+            brackets = "i";
+        break;
+
+        case MT_ERROR:
+            color= "#ff0000";
+            brackets = "b";
+        break;
+
+        case MT_OK:
+            color= "#0000ff";
+            brackets = "b";
+        break;
+
+        default:
+            color= "#000000";
+            brackets = "b";
+        break;
+
+    }
+    QString line = QString("<%1><font color=%2>%0</font></%1>").arg(aInformation).arg(brackets).arg(color);
+    ui->mLog->append(line);
 }
 
 void MainWindow::slotShowSensor(int aSensorId, int aSensorValue)
@@ -62,6 +92,9 @@ void MainWindow::slotShowSensor(int aSensorId, int aSensorValue)
 
 void MainWindow::timerEvent(QTimerEvent*)
 {
+    if(!ui->mCheckBoxSensors->isChecked())
+        return;
+
     for(auto frame : mControlFrames)
         mClient.slotSendGetSensorsCommand(frame->getId());
 }

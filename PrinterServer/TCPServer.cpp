@@ -1,5 +1,4 @@
 #include "TCPServer.h"
-#include "TCPConnection.h"
 #include "Protocol.h"
 #include <QTcpSocket>
 #include "Printer.h"
