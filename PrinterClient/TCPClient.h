@@ -30,7 +30,6 @@ class TCPClient : public QObject
        void reciveHandler();
        void slotSendRunMovementCommand(int aAxisId, int aStepsCount, int aDirection, QColor aColor);
        void slotSendGetSensorsCommand(int aSensorId);
-       void slotDataHandler(const QByteArray& aData);
 
     signals:
        void signalCoreConnected();
@@ -45,7 +44,7 @@ class TCPClient : public QObject
        int mTimeout{default_timeout};
        QTcpSocket *mpSocket;
 
-       virtual void handler(const QByteArray &aData);
+       virtual void dataHandler(const QByteArray &aData);
        virtual void connected();
        virtual void disconnected();
        virtual void bytesWritten(qint64 bytes);

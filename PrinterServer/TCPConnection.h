@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QHostAddress>
 #include "Protocol.h"
+#include <QMutex>
 
 class QTcpSocket;
 
@@ -29,6 +30,7 @@ private slots:
 
 private:
     QTcpSocket* mpSocket;
+    QMutex mMutex;
 
     void sendAnswer(const Answer &ans);
 };

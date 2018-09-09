@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
             for(auto frame : mControlFrames)
                 mClient.slotSendGetSensorsCommand(frame->getId());
     });
-    timer->start(1000);
+    timer->start(500);
 }
 
 MainWindow::~MainWindow()

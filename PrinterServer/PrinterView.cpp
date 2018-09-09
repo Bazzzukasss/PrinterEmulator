@@ -27,14 +27,13 @@ void PrinterView::slotShowPrinter(const PrinterHead& aHead)
     size = aHead.mAxises[AXIS_Z].mValue;
     color = aHead.mColor;
 
-    mHead->setPos(x-10, y-10);
-    mHead->setScale(size/100.0 + 1.0);
     if((x!=prevX)||(y!=prevY))
     {
-        mScene->addLine(prevX,prevY,x,y,QPen(QBrush(color),3));
+        mScene->addLine(prevX,prevY,x,y,QPen(QBrush(color),size/10.0));
         prevX = x;
         prevY = y;
     }
+    mHead->setPos(x-10, y-10);
 }
 
 void PrinterView::mousePressEvent(QMouseEvent *event)

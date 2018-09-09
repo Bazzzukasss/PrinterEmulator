@@ -27,17 +27,13 @@ TCPClient::~TCPClient()
 
 void TCPClient::reciveHandler()
 {
-    QByteArray buf;
+    QByteArray data;
 
-    buf.append( mpSocket->readAll() );
-    emit signalInformation(QString("[Received]\t%1 bytes:%2").arg(buf.size()).arg(buf.data()));
+    data.append( mpSocket->readAll() );
+    emit signalInformation(QString("[Received]\t%1").arg(data.size()));
+    emit signalDataReceived(data);
 
-	handler(buf);
-}
-
-void TCPClient::handler(const QByteArray& aData)
-{
-    emit signalDataReceived(aData);
+    dataHandler(data);
 }
 
 void TCPClient::connected()
@@ -95,27 +91,31 @@ void TCPClient::slotSendGetSensorsCommand(int aSensorId)
     sendCommand(cmd);
 }
 
-void TCPClient::slotDataHandler(const QByteArray &aData)
+void TCPClient::dataHandler(const QByteArray &aData)
 {
     Answer* ans = (Answer*)(aData.data());
-    switch(ans->mType)
-    {
-        case ANS_RESULT:
-                if(ans->data.ansResult.mDescription == RES_CMD_ACCEPTED)
-                    emit signalInformation("[Ok] Command accepted.");
-                else
-                    emit signalInformation("[Error] Server busy!");
-            break;
+    int ansCount = aData.size() / sizeof(Answer);
+    do{
+        switch(ans->mType)
+        {
+            case ANS_RESULT:
+                    if(ans->data.ansResult.mDescription == RES_CMD_ACCEPTED)
+                        emit signalInformation("[Ok] Command accepted.");
+                    else
+                        emit signalInformation("[Error] Server busy!");
+                break;
 
-        case ANS_SENSORS:
-                emit signalShowSensor(ans->data.ansSensors.mId,ans->data.ansSensors.mValue);
-            break;
-    }
+            case ANS_SENSORS:
+                    emit signalShowSensor(ans->data.ansSensors.mId,ans->data.ansSensors.mValue);
+                break;
+        }
+        ++ans;
+    }while(--ansCount > 0);
 }
 
 void TCPClient::sendCommand(const Command& aCmd)
 {
-    QMutexLocker locker(&mMutex);
+    //QMutexLocker locker(&mMutex);
     QByteArray data;
     data.append((char*)&aCmd, sizeof(Command));
     sendData(data);
