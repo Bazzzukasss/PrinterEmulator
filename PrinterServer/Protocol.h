@@ -1,5 +1,5 @@
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#ifndef PROTOCOL_H
+#define PROTOCOL_H
 
 enum CommandsType{ CMD_SET, CMD_GET_SENSORS, CMD_MOVE};
 enum AnswersType{ ANS_RESULT, ANS_SENSORS};
@@ -47,4 +47,4 @@ struct Answer{
     }data;
 };
 
-#endif // COMMANDS_H
+#endif // PROTOCOL_H

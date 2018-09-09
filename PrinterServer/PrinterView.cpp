@@ -36,19 +36,19 @@ void PrinterView::slotShowPrinter(const PrinterHead& aHead)
     mHead->setPos(x-10, y-10);
 }
 
-void PrinterView::mousePressEvent(QMouseEvent *event)
+void PrinterView::mousePressEvent(QMouseEvent*)
 {
     mOldX = cursor().pos().x();
     mOldY = cursor().pos().y();
 }
 
-void PrinterView::mouseReleaseEvent(QMouseEvent *event)
+void PrinterView::mouseReleaseEvent(QMouseEvent*)
 {
     mOldAngleX = mAngleX;
     mOldAngleZ = mAngleZ;
 }
 
-void PrinterView::mouseMoveEvent(QMouseEvent *event)
+void PrinterView::mouseMoveEvent(QMouseEvent*)
 {
     mAngleX = mOldAngleX + (mOldX - cursor().pos().x())/1.0;
     mAngleZ = mOldAngleZ + (mOldY - cursor().pos().y())/1.0;

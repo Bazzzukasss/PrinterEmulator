@@ -3,7 +3,7 @@
 
 #include <QGraphicsView>
 
-class PrinterHead;
+struct PrinterHead;
 
 class PrinterView : public QGraphicsView
 {

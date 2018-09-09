@@ -21,7 +21,7 @@ QHostAddress TCPConnection::getClientAddress() const
 
 int TCPConnection::getId() const
 {
-    return (int)mpSocket;
+    return reinterpret_cast<intptr_t>(mpSocket);
 }
 
 void TCPConnection::sendResultAnswer(int aDescription)
@@ -48,23 +48,23 @@ void TCPConnection::slotReciveHandler()
     QByteArray buf;
     buf.append( mpSocket->readAll() );
 
-    emit signalInformation(QString("[Received from: %0 ( id:%1 )]\t%2 bytes").arg(mpSocket->peerAddress().toString()).arg((uint)mpSocket).arg(buf.size()) );
+    emit signalInformation(QString("[Received from: %0 ( id:%1 )]\t%2 bytes").arg(mpSocket->peerAddress().toString()).arg(reinterpret_cast<intptr_t>(mpSocket)).arg(buf.size()) );
     emit signalDataReceived(buf);
 }
 
 void TCPConnection::slotConnected()
 {
-    emit signalInformation(QString("[Connected from: %0 ( id:%1 )]").arg(mpSocket->peerAddress().toString()).arg((uint)mpSocket));
+    emit signalInformation(QString("[Connected from: %0 ( id:%1 )]").arg(mpSocket->peerAddress().toString()).arg(reinterpret_cast<intptr_t>(mpSocket)));
 }
 
 void TCPConnection::slotDisconnected()
 {
-    emit signalInformation(QString("[Disconnected : %0 ( id:%1 )]").arg(mpSocket->peerAddress().toString()).arg((uint)mpSocket));
+    emit signalInformation(QString("[Disconnected : %0 ( id:%1 )]").arg(mpSocket->peerAddress().toString()).arg(reinterpret_cast<intptr_t>(mpSocket)));
 }
 
 void TCPConnection::slotBytesWritten(qint64 aBytes)
 {
-    emit signalInformation(QString("[Sended to: %0 ( id:%1 )]\t%2 bytes").arg(mpSocket->peerAddress().toString()).arg((uint)mpSocket).arg(aBytes));
+    emit signalInformation(QString("[Sended to: %0 ( id:%1 )]\t%2 bytes").arg(mpSocket->peerAddress().toString()).arg(reinterpret_cast<intptr_t>(mpSocket)).arg(aBytes));
 }
 
 void TCPConnection::sendAnswer(const Answer &ans)

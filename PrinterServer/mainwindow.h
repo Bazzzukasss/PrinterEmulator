@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "TCPServer.h"
 
-class PrinterHead;
+struct PrinterHead;
 
 namespace Ui {
 class MainWindow;

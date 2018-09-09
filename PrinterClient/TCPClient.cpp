@@ -115,7 +115,7 @@ void TCPClient::dataHandler(const QByteArray &aData)
 
 void TCPClient::sendCommand(const Command& aCmd)
 {
-    //QMutexLocker locker(&mMutex);
+    QMutexLocker locker(&mMutex);
     QByteArray data;
     data.append((char*)&aCmd, sizeof(Command));
     sendData(data);
