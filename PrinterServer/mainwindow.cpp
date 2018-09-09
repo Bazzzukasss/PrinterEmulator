@@ -13,9 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(pPRINTER, &Printer::signalStateChanged,     ui->mView,  &PrinterView::slotShowPrinter);
 
     if(!mServer.listen(QHostAddress::Any, 1234))
-        ui->mServerInfoEdit->append("[Error]\tServer could not start.");
+        slotShowServerInformation("[Error]\tServer could not start.",MT_ERROR);
     else
-        ui->mServerInfoEdit->append("Server started.");
+        slotShowServerInformation("Server started.",MT_INFO);
 }
 
 MainWindow::~MainWindow()

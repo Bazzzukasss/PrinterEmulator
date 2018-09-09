@@ -16,7 +16,7 @@ void TCPServer::slotNewConnection()
     connect(pConnection,&TCPConnection::signalInformation,  this, &TCPServer::signalInformation );
     connect(pConnection,&TCPConnection::signalDataReceived, this ,&TCPServer::slotDataHandler );
 
-    emit signalInformation(QString("[Connected: %0( id:%1 )]").arg(pConnection->getClientAddress().toString()).arg((int)pConnection->getId()) );
+    emit signalInformation(QString("[Connected: %0( id:%1 )]").arg(pConnection->getClientAddress().toString()).arg((int)pConnection->getId()), MT_INFO );
 }
 
 void TCPServer::slotDataHandler(const QByteArray &aData)
